@@ -1,0 +1,38 @@
+
+---
+
+## ⚡ 1. Power Supply System
+
+- **Power Inputs:** The controller can be powered via a 3.7V rechargeable LiPo battery or directly through USB.
+- **Voltage Regulation:** An onboard regulator steps down the power to a stable **3.3V DC** rail used by the ESP32 module and the analog joysticks.
+- **Ground (GND):** All components share a common ground plane across the PCB for signal stability.
+
+---
+
+## 🕹️ 2. Analog Joysticks (U1 & U2)
+
+- **How Joysticks Work:** Each joystick module (COM-09032) contains two built-in 10kΩ potentiometers (one for the X-axis and one for the Y-axis).
+- **Signal Output:** As the player moves the joystick, the wipers output a varying analog voltage ($0\text{V} \text{ to } 3.3\text{V}$) into the ESP32's analog input pins (`GPIO 36`, `39`, `32`, `33`).
+- **ADC Pins Used:** All joystick axis signals are assigned to **ADC1 pins**, ensuring the joysticks function smoothly while Bluetooth transmission is active.
+
+---
+
+## 🔘 3. Tactile Pushbuttons
+
+- **Circuit Topology (Active LOW):** Every pushbutton has Pin 1 connected to an ESP32 GPIO pin and Pin 2 connected directly to Ground (`GND`).
+- **Zero External Resistors:** The PCB uses **0 external pull-up resistors**. When a button is not pressed, internal software pull-up resistors inside the ESP32 keep the pin HIGH (3.3V).
+- **Button Press:** When a button is pressed, the switch closes, pulling the pin LOW (0V). The ESP32 detects this voltage drop as a button press.
+
+---
+
+## 📶 4. Bluetooth Wireless Transmission
+
+- **Wireless Link:** The ESP32 utilizes its built-in Bluetooth antenna to pair wirelessly with PCs, mobile phones, or consoles.
+- **Gamepad Profile:** The ESP32 automatically formats the joystick position voltages and button states into standard Bluetooth Gamepad (HID) signals, so no special software or drivers are required on the host device.
+
+---
+
+## 🎨 5. PCB Layout & Routing Strategy
+
+- **Zero-Crossover Pinout:** To prevent crossing wires on a 2-layer PCB, all left-side components (D-Pad, Left Joystick, L1, L2, START) are wired to the **Left Header (J2)**, and all right-side components (Action buttons, R1, R2, SELECT, HOME) are wired to the **Right Header (J3)**.
+- **Ground Pour Plane:** Both the top and bottom copper layers include a solid Ground (`GND`) polygon pour to reduce noise and provide a clean circuit ground return path.
